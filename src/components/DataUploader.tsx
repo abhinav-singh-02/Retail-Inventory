@@ -274,7 +274,7 @@ export default function DataUploader({ onDataLoaded }: DataUploaderProps) {
           <div>
             <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">New to the platform?</h4>
             <p className="text-[10px] text-slate-500 mt-0.5 leading-relaxed font-medium">
-              Click <strong className="text-blue-600 font-bold">Load Demo Data</strong> above to activate full interactive reports, stockout logs, and secure Gemini intelligence recommendations instantly.
+              Click <strong className="text-blue-600 font-bold">Load Demo Data</strong> above to activate full interactive reports and stockout logs instantly.
             </p>
           </div>
         </div>
