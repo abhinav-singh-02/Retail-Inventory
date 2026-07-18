@@ -1,0 +1,6 @@
+{
+  "name": "Retail Sales Intelligence Portal",
+  "description": "An interactive full-stack business intelligence dashboard for retail operations managers to process offline store data, monitor KPIs, visualize trends, and generate AI-driven strategic insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
