@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Download, FileText, Image, Printer, Loader2, Sparkles, CheckCircle } from "lucide-react";
-import html2canvas from "html2canvas";
+import * as htmlToImage from "html-to-image";
 import { jsPDF } from "jspdf";
 
 interface ExportHeaderProps {
@@ -28,23 +28,17 @@ export default function ExportHeader({ hasData, filterContext }: ExportHeaderPro
       }
 
       // Briefly style or hide elements that shouldn't be in the export if needed
-      const canvas = await html2canvas(element, {
-        scale: 2, // Retain high resolution
-        useCORS: true,
-        logging: false,
+      const dataUrl = await htmlToImage.toPng(element, {
+        pixelRatio: 2, // Retain high resolution
         backgroundColor: "#f8fafc", // matches background slate-50
-        windowWidth: 1400, // force desktop widths for responsive cards to align beautifully
-        onclone: (clonedDoc) => {
+        filter: (node) => {
           // Hide data uploader section or backends inside cloned document to keep the report super professional!
-          const clonedUploader = clonedDoc.getElementById("data-uploader-section");
-          if (clonedUploader) clonedUploader.style.display = "none";
-          
-          const clonedActionBtn = clonedDoc.getElementById("insights-action-button");
-          if (clonedActionBtn) clonedActionBtn.style.display = "none";
+          if (node.id === "data-uploader-section") return false;
+          if (node.id === "insights-action-button") return false;
+          return true;
         }
       });
 
-      const dataUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       const dateStr = new Date().toISOString().split("T")[0];
       link.download = `Retail_Operations_KPI_Report_${dateStr}.png`;
@@ -69,19 +63,14 @@ export default function ExportHeader({ hasData, filterContext }: ExportHeaderPro
         throw new Error("Capture area not found.");
       }
 
-      const canvas = await html2canvas(element, {
-        scale: 1.5, // optimal size for PDFs to fit standard scale
-        useCORS: true,
-        logging: false,
+      const imgData = await htmlToImage.toPng(element, {
+        pixelRatio: 1.5, // optimal size for PDFs to fit standard scale
         backgroundColor: "#f8fafc",
-        windowWidth: 1400,
-        onclone: (clonedDoc) => {
-          const clonedUploader = clonedDoc.getElementById("data-uploader-section");
-          if (clonedUploader) clonedUploader.style.display = "none";
+        filter: (node) => {
+          if (node.id === "data-uploader-section") return false;
+          return true;
         }
       });
-
-      const imgData = canvas.toDataURL("image/png");
       
       // Page setup (A4 standard)
       const pdf = new jsPDF({
@@ -92,7 +81,10 @@ export default function ExportHeader({ hasData, filterContext }: ExportHeaderPro
 
       const imgWidth = 210; // A4 Width in mm
       const pageHeight = 297; // A4 Height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      // Get dimensions from element
+      const elWidth = element.offsetWidth || 1;
+      const elHeight = element.offsetHeight || 1;
+      const imgHeight = (elHeight * imgWidth) / elWidth;
       let heightLeft = imgHeight;
       let position = 0;
 

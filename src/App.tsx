@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from "react";
-import { Database, LayoutDashboard, FileSpreadsheet, FilterX } from "lucide-react";
+import { Database, LayoutDashboard, FileSpreadsheet, Sparkles, FilterX } from "lucide-react";
 import { MergedRow, FilterState, DashboardMetrics } from "./types";
 import ExportHeader from "./components/ExportHeader";
 import DataUploader from "./components/DataUploader";
 import SidebarFilters from "./components/SidebarFilters";
 import KPICards from "./components/KPICards";
 import DashboardCharts from "./components/DashboardCharts";
+import InsightsPanel from "./components/InsightsPanel";
 
 export default function App() {
   const [rawData, setRawData] = useState<MergedRow[]>([]);
@@ -144,6 +145,9 @@ export default function App() {
 
                   {/* Operational analytics charts */}
                   <DashboardCharts filteredData={filteredData} />
+
+                  {/* Secure AI directives generator */}
+                  <InsightsPanel filteredData={filteredData} metrics={metrics} />
                 </>
               ) : (
                 <div className="bg-white rounded border border-slate-200 p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
@@ -173,6 +177,10 @@ export default function App() {
                   <div className="flex items-center gap-1.5 text-[10px] text-slate-500 bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
                     <LayoutDashboard className="w-3.5 h-3.5 text-blue-600" />
                     Interactive Recharts
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] text-slate-500 bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    Gemini Intelligence
                   </div>
                 </div>
               </div>
